@@ -7,12 +7,12 @@ const TopNews = (props) => {
 
     useEffect(() => {
         // Component mounted
-        loadNews();
+        getNews();
     }, [])
 
     // console.log('news', news);
 
-    const loadNews = async () => {
+    const getNews = async () => {
         try {
             // Get news from endpoint
             const res = await fetch('https://newsapi.org/v2/top-headlines?country=gb&apiKey=59190f37d9f241a28a044c7042722e6d');
@@ -30,7 +30,7 @@ const TopNews = (props) => {
 
     const articleSelectedHandler = (id) => {
         props.history.push({ 
-            pathname: '/' + id,
+            pathname: '/top-news/' + id,
             state: news[id]
         });
     }
@@ -41,7 +41,6 @@ const TopNews = (props) => {
             {news.map((newsItem, index) => 
                 <NewsItem
                     key={index}
-                    id={index}
                     title={newsItem.title}
                     image={newsItem.urlToImage}
                     description={newsItem.description}

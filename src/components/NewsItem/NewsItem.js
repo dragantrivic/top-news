@@ -8,7 +8,6 @@ const newsItemStyle = {
 
 const NewsItem = (props) => {
     const data = {
-        id: props.id,
         title: props.title,
         image: props.image,
         desc: props.description,
