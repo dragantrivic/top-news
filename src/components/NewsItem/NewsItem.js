@@ -1,4 +1,5 @@
 import React from 'react';
+// import { Link } from 'react-router-dom';
 
 const newsItemStyle = {
     border: '1px solid #ccc', 
@@ -7,17 +8,19 @@ const newsItemStyle = {
 
 const NewsItem = (props) => {
     const data = {
+        id: props.id,
         title: props.title,
         image: props.image,
-        desc: props.description
+        desc: props.description,
+        clicked: props.clicked
     }
 
     return (
         <div style={newsItemStyle}>
             <h2>{data.title}</h2>
-            <img src={data.image} alt="" />
+            <img src={data.image} alt={data.title} />
             <p>{data.desc}</p>
-            <a href="http://google.com">More</a>
+            <button type="button" onClick={props.clicked}>More</button>
         </div>
     );
 }
