@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Switch, Route, useLocation } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import TopNews from './containers/TopNews/TopNews';
@@ -8,20 +8,38 @@ import Search from './containers/Search/Search';
 import FullArticle from './containers/FullArticle/FullArticle';
 
 const App = () => {
+  const [lang, setLang] = useState('');
+  const location = useLocation();
+
+  useEffect(() => {
+    langChangeHandler();
+  }, [location,lang]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const langChangeHandler = () => {
+    const pathname = location.pathname.split('/');
+    const activeLang = pathname[1];
+    setLang(activeLang);
+  }
+
   return (
-    <Router>
-      <div>
-        <Layout>
-          <Switch>
-            <Route exact path="/" component={TopNews} />
-            <Route path="/categories" component={AllCategories} />
-            <Route path="/search" component={Search} />
-            <Route exact path="/top-news/:id" component={FullArticle} />
-            <Route exact path="/:category/:id" component={FullArticle} />
-          </Switch>
-        </Layout>
-      </div>
-    </Router>
+    <Layout>
+      <Switch>
+        <Route exact path="/:lng/" render={(props) => (
+            <TopNews {...props} activeLang={lang} />
+          )}
+        />
+        <Route path="/:lng/categories" render={(props) => (
+            <AllCategories {...props} activeLang={lang} />
+          )}
+        />
+        <Route path="/:lng/search" render={(props) => (
+            <Search {...props} activeLang={lang} />
+          )}
+        />
+        <Route path="/:lng/top-news/:id" component={FullArticle} />
+        <Route path="/:lng/:category/:id" component={FullArticle} />
+      </Switch>
+    </Layout>
   );
 };
 
