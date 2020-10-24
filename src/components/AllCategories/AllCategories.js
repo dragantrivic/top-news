@@ -13,17 +13,20 @@ const AllCategories = (props) => {
         { name: 'technology' }
     ];
 
+    const activeLang = props.activeLang;
+
     return (
-        <div>
-            <h1>Top 5 news by categories from GB:</h1>
+        <section>
+            <h1>Top 5 news by categories from {activeLang === 'gb' ? 'Great Britan' : 'United States' }</h1>
             {categories.map((category, index) => 
                 <SingleCategory 
                     key={index} 
                     categoryName={category.name}
+                    activeLang={activeLang}
                     navProps={props}
                 />
             )}
-        </div>
+        </section>
     );
 }
 

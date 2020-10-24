@@ -4,18 +4,19 @@ import NewsItem from '../../components/NewsItem/NewsItem';
 
 const TopNews = (props) => {
     const [news, setNews] = useState([]);
+    const activeLang = props.activeLang;
 
     useEffect(() => {
         // Component mounted
-        getNews();
-    }, [])
+        if (activeLang) {
+            getNews(activeLang);
+        }
+    }, [activeLang]);
 
-    // console.log('news', news);
-
-    const getNews = async () => {
+    const getNews = async (lang) => {
         try {
             // Get news from endpoint
-            const res = await fetch('https://newsapi.org/v2/top-headlines?country=gb&apiKey=59190f37d9f241a28a044c7042722e6d');
+            const res = await fetch(`https://newsapi.org/v2/top-headlines?country=${lang}&apiKey=2d54fd7673fa427186ec6c9301c0745a`);
             const data = await res.json();
 
             setNews([...data.articles]);
@@ -30,14 +31,14 @@ const TopNews = (props) => {
 
     const articleSelectedHandler = (id) => {
         props.history.push({ 
-            pathname: '/top-news/' + id,
+            pathname: `/${activeLang}/top-new/${id}`,
             state: news[id]
         });
     }
 
     return (
-        <div>
-            <h1>Top News From Great Britain</h1>
+        <section>
+            <h1>Top News From {activeLang === 'gb' ? 'Great Britan' : 'United States' }</h1>
             {news.map((newsItem, index) => 
                 <NewsItem
                     key={index}
@@ -47,7 +48,7 @@ const TopNews = (props) => {
                     clicked={() => articleSelectedHandler(index)}
                 />
             )}
-        </div>
+        </section>
     )
 }
 

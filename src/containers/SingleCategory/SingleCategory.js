@@ -6,16 +6,17 @@ const SingleCategory = (props) => {
     const [topNews, setTopNews] = useState([]);
     const category = props.categoryName;
     const navProps = props.navProps;
-
-    // console.log('props', props);
+    const activeLang = props.activeLang;
 
     useEffect(() => {
-        getTopNewsByCategory(category);
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        if (activeLang) {
+            getTopNewsByCategory(activeLang, category);
+        }
+    }, [activeLang]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const getTopNewsByCategory = async (category) => {
+    const getTopNewsByCategory = async (lang, category) => {
         try {
-            const res = await fetch(`https://newsapi.org/v2/top-headlines?country=gb&pageSize=5&category=${category}&apiKey=59190f37d9f241a28a044c7042722e6d`);
+            const res = await fetch(`https://newsapi.org/v2/top-headlines?country=${lang}&pageSize=5&category=${category}&apiKey=2d54fd7673fa427186ec6c9301c0745a`);
             const data = await res.json();
 
             // console.log(data.articles);
@@ -32,7 +33,7 @@ const SingleCategory = (props) => {
 
     const articleSelectedHandler = (id) => {
         navProps.history.push({ 
-            pathname: `/${category}/${id}`,
+            pathname: `/${activeLang}/${category}/${id}`,
             state: topNews[id]
         });
     }

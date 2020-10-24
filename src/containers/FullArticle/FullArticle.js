@@ -9,17 +9,16 @@ const FullArticle = (props) => {
     const data = {
         title: state.title,
         image: state.urlToImage,
-        content: state.content
+        content: state.content,
+        lang: props.location.pathname.split('/')[1]
     }
-
-    // console.log(state)
 
     return (
         <section>
             <h1>{data.title}</h1>
             <img src={data.image} alt={data.title} />
             <p>{data.content}</p>
-            <Link to="/">Back to list</Link>
+            <Link to={`/${data.lang}`}>Back to list</Link>
         </section>
     );
 }
