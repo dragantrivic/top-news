@@ -28,11 +28,11 @@ const TopNews = (props) => {
 
             const data = await res.json();
             
-            if(data) {
-                setIsHavingResults(false);
+            if(data.status !== 'error') {
+                setIsHavingResults(true);
                 setNews([...data.articles]);
             } else {
-                setIsHavingResults(true);
+                setIsHavingResults(false);
             }
 
             if (!res.ok) {
