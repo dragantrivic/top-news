@@ -1,3 +1,6 @@
+## Top News
+Top news is a simple web application where users can find breaking news & current news headlines from Great Britain and the United States.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
