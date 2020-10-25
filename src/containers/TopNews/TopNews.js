@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import ApiService from '../../services/ApiService';
 
 import NewsItem from '../../components/NewsItem/NewsItem';
 
 const TopNews = (props) => {
     const [news, setNews] = useState([]);
     const activeLang = props.activeLang;
+    const category = props.location.state;
 
     useEffect(() => {
         // Component mounted
-        if (activeLang) {
-            getNews(activeLang);
+        if (activeLang || category) {
+            getNews(activeLang, category);
         }
-    }, [activeLang]);
+    }, [activeLang, category]);
 
-    const getNews = async (lang) => {
+    const getNews = async (lang, category) => {
         try {
-            // Get news from endpoint
-            const res = await fetch(`https://newsapi.org/v2/top-headlines?country=${lang}&apiKey=2d54fd7673fa427186ec6c9301c0745a`);
+            let res;
+
+            if (category) {
+                res = await ApiService.getAllTopNewsByCat(lang, category);
+            } else {
+                res = await ApiService.getTopNews(lang);
+            }
+
             const data = await res.json();
 
             setNews([...data.articles]);
@@ -29,25 +37,34 @@ const TopNews = (props) => {
         }
     }
 
-    const articleSelectedHandler = (id) => {
-        props.history.push({ 
-            pathname: `/${activeLang}/top-new/${id}`,
-            state: news[id]
-        });
+    const articleSelectedHandler = (id, category) => {
+        if (category) {
+            props.history.push({ 
+                pathname: `/${activeLang}/${category}/${id}`,
+                state: news[id]
+            });
+        } else {
+            props.history.push({ 
+                pathname: `/${activeLang}/news/${id}`,
+                state: news[id]
+            });
+        }
     }
 
     return (
         <section>
-            <h1>Top News From {activeLang === 'gb' ? 'Great Britan' : 'United States' }</h1>
-            {news.map((newsItem, index) => 
-                <NewsItem
-                    key={index}
-                    title={newsItem.title}
-                    image={newsItem.urlToImage}
-                    description={newsItem.description}
-                    clicked={() => articleSelectedHandler(index)}
-                />
-            )}
+            <h1 className="mx-4 mb-4 text-3xl font-bold">Top {category} news from {activeLang === 'gb' ? 'Great Britan' : 'United States' }</h1>
+            <section className="flex flex-wrap justify-start">
+                {news.map((newsItem, index) => 
+                    <NewsItem
+                        key={index}
+                        title={newsItem.title}
+                        image={newsItem.urlToImage}
+                        description={newsItem.description}
+                        clicked={() => articleSelectedHandler(index, category)}
+                    />
+                )}
+            </section>
         </section>
     )
 }
