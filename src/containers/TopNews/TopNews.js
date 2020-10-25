@@ -5,6 +5,7 @@ import NewsItem from '../../components/NewsItem/NewsItem';
 
 const TopNews = (props) => {
     const [news, setNews] = useState([]);
+    const [isHavingResults, setIsHavingResults] = useState(true);
     const activeLang = props.activeLang;
     const category = props.location.state;
 
@@ -26,8 +27,13 @@ const TopNews = (props) => {
             }
 
             const data = await res.json();
-
-            setNews([...data.articles]);
+            
+            if(data) {
+                setIsHavingResults(false);
+                setNews([...data.articles]);
+            } else {
+                setIsHavingResults(true);
+            }
 
             if (!res.ok) {
                 throw Error(res.statusText);
@@ -64,6 +70,7 @@ const TopNews = (props) => {
                         clicked={() => articleSelectedHandler(index, category)}
                     />
                 )}
+                {!isHavingResults && <p className="text-gray-700 text-base mx-4 mb-4">There are no news. Please try again later.</p>}
             </section>
         </section>
     )
