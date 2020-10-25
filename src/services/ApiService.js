@@ -1,5 +1,5 @@
 const BASE_URL = 'https://newsapi.org/v2';
-const API_KEY = '59190f37d9f241a28a044c7042722e6d';
+const API_KEY = '9349a195a9c640d687e5bc3fc2e1ee0e';
 
 let get = (url) => {
     return fetch(url);
