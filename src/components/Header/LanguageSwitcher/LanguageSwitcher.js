@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const LanguageSwitcher = () => {
+const LanguageSwitcher = (props) => {
     const [pageUrl, setPageUrl] = useState('');
+    const [isMultiLang, setIsMultiLang] = useState(true);
     const location = useLocation();
 
     useEffect(() => {
@@ -11,20 +12,40 @@ const LanguageSwitcher = () => {
 
     const urlChangeHandler = () => {
         const pathnameArr = location.pathname.split('/');
-
         let activePageUrl = '';
+
         if(pathnameArr.length > 2) {
             activePageUrl = pathnameArr[2];
+        }
+
+        if(pathnameArr.length === 4) {
+            setIsMultiLang(false);
+        } else {
+            setIsMultiLang(true);
         }
 
         setPageUrl(activePageUrl);
     }
 
     return(
-        <ul>
-            <li><NavLink to={`/gb/${pageUrl}`}>GB</NavLink></li>
-            <li><NavLink to={`/us/${pageUrl}`}>US</NavLink></li>
-        </ul>
+        isMultiLang && (
+            <React.Fragment>
+                <NavLink 
+                    to={`/gb/${pageUrl}`}
+                    onClick={props.clicked} 
+                    className={props.classes}
+                    activeClassName="bg-gray-900">
+                        GB
+                </NavLink>
+                <NavLink 
+                    to={`/us/${pageUrl}`}
+                    onClick={props.clicked} 
+                    className={props.classes}
+                    activeClassName="bg-gray-900">
+                        US
+                </NavLink>
+            </React.Fragment>
+        )
     );
 };
 
